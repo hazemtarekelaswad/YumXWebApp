@@ -97,3 +97,12 @@
   border: none !important;
 }
 
+.error-message {
+  color: #ff4d4d;
+  margin-top: 1.3em;
+}
+
+.success-message {
+  color: #0d9a3e;
+  margin-top: 1.3em;
+}

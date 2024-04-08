@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Accordion, Card } from "react-bootstrap";
-
+import { Container, Form, Button, Accordion, Card, Alert } from "react-bootstrap";
 import logoImage from "./assets/yumxLogo.png";
 
 import "./App.css";
@@ -8,11 +7,15 @@ import "./App.css";
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const handleDeleteAccount = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!email || !password) {
-      alert("Please enter both email and password");
+      // alert("Please enter both email and password");
+      setIsError(true);
+      setMessage("Please enter both email and password");
       return;
     }
 
@@ -43,7 +46,9 @@ function App() {
       if(data["token"]){
         token = data["token"];
       }else{
-        alert(data["message"]);
+        // alert(data["message"]);
+        setIsError(true);
+        setMessage(data["message"]);
         return;
       }
      
@@ -57,9 +62,14 @@ function App() {
       );
       const delData = await delResponse.json();
       const message = delData["message"]; 
-      alert(message);
+      // alert(message);
+      setIsError(false);
+      setMessage(message);
+
     } catch (error) {
-      alert("Failed to delete account - please try again later");
+      // alert("Failed to delete account - please try again later");
+      setIsError(true);
+      setMessage("Failed to delete account - please try again later");
     }
   };
   return (
@@ -118,8 +128,8 @@ function App() {
                         onChange={(e) => setPassword(e.target.value)}
                       />
                     </Form.Group>
-
-                    <Button variant="primary mt-5" type="submit">
+                    <p className={isError ? "error-message" : "success-message"}>{isError && "*"} {message}</p>
+                    <Button variant="primary mt-3" type="submit">
                       Delete Account
                     </Button>
                   </Form>
